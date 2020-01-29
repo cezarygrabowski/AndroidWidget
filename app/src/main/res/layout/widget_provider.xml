@@ -1,0 +1,14 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_margin="@dimen/widget_margin"
+android:id="@+id/widget">
+    <ImageView android:id="@+id/image_view" android:layout_height="300dp" android:layout_width="300dp" android:contentDescription="@string/todo"
+               android:src="@drawable/example_appwidget_preview"/>
+
+    <StackView
+               android:id="@+id/stack_view"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:gravity="center" />
+</FrameLayout>
