@@ -39,6 +39,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class StackWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        Toast.makeText(getApplicationContext(), "view factory1", Toast.LENGTH_SHORT).show();
+
         return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 }
@@ -50,6 +52,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     public StackRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
+        Toast.makeText(context, "view factory", Toast.LENGTH_SHORT).show();
+
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
     }
@@ -68,11 +72,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public void onCreate() {
-        // In onCreate() you setup any connections / cursors to your data source. Heavy lifting,
-        // for example downloading or creating content etc, should be deferred to onDataSetChanged()
-        // or getViewAt(). Taking more than 20 seconds in this call will result in an ANR.
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        final CountDownLatch latch = new CountDownLatch(1);
 
         firestore.collection("shops")
                 .get()
@@ -80,9 +80,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-
                             render(task);
-                            latch.countDown();
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
@@ -90,7 +88,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 });
 
         try {
-            latch.await();
+//            latch.await();
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
